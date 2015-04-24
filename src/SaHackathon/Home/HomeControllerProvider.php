@@ -37,7 +37,150 @@ class HomeControllerProvider implements ControllerProviderInterface
             '/',
             function(Application $app) use($that) {
                 return $that->twig->render(
-                    'index.html.twig'
+                    'index.html.twig',
+                    [
+                        'events' => [
+                            [
+                                'title' => 'News 1',
+                                'slug' => 'news-1',
+                                'likeCount' => 74,
+                                'dislikeCount' => 26,
+                            ],
+                            [
+                                'title' => 'News 2',
+                                'slug' => 'news-2',
+                                'likeCount' => 35,
+                                'dislikeCount' => 6,
+                            ],
+                            [
+                                'title' => 'News 3',
+                                'slug' => 'news-3',
+                                'likeCount' => 50,
+                                'dislikeCount' => 50,
+                            ],
+                            [
+                                'title' => 'News 4',
+                                'slug' => 'news-4',
+                                'likeCount' => 10,
+                                'dislikeCount' => 4,
+                            ]
+                        ]
+                    ]
+                );
+            }
+        );
+
+        $controllers->get(
+            '/article/{slug}',
+            function($slug) use($that) {
+                return $this->twig->render(
+                    'article.html.twig',
+                    [
+                        'article' => [
+                            'slug' => $slug,
+                            'title' => 'Rosenborg-ledelsen visste ikke at Nicki Bille var dømt tidligere',
+                            'eventsLike' => [
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 15,
+                                    'x' => strtotime('2015-04-24T23:00:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 25,
+                                    'x' => strtotime('2015-04-24T23:01:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 5,
+                                    'x' => strtotime('2015-04-24T23:03:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 17,
+                                    'x' => strtotime('2015-04-24T23:05:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 45,
+                                    'x' => strtotime('2015-04-24T23:06:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 75,
+                                    'x' => strtotime('2015-04-24T23:08:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 30,
+                                    'x' => strtotime('2015-04-24T23:09:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'like',
+                                    'color' => '#009900',
+                                    'y' => 25,
+                                    'x' => strtotime('2015-04-24T23:10:00Z') * 1000
+                                ]
+                            ],
+                            'eventsDislike' => [
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 35,
+                                    'x' => strtotime('2015-04-24T23:02:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 7,
+                                    'x' => strtotime('2015-04-24T23:04:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 5,
+                                    'x' => strtotime('2015-04-24T23:07:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 65,
+                                    'x' => strtotime('2015-04-24T23:09:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 75,
+                                    'x' => strtotime('2015-04-24T23:11:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 5,
+                                    'x' => strtotime('2015-04-24T23:13:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 20,
+                                    'x' => strtotime('2015-04-24T23:15:00Z') * 1000
+                                ],
+                                [
+                                    'decision' => 'dislike',
+                                    'color' => '#990000',
+                                    'y' => 37,
+                                    'x' => strtotime('2015-04-24T23:17:00Z') * 1000
+                                ],
+                            ],
+                        ]
+                    ]
                 );
             }
         );
