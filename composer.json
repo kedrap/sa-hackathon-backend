@@ -1,0 +1,12 @@
+{
+    "name": "stp-sa-hackathon/sa-hackathon-backend",
+    "require": {
+        "silex/silex": "~1.2"
+    },
+    "authors": [
+        {
+            "name": "SA STP Team",
+            "email": "sa@schibsted.pl"
+        }
+    ]
+}
