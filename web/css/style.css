@@ -6,3 +6,35 @@ body {
 input {
     color: #000;
 }
+
+.events-list {
+    padding-left: 0;
+}
+
+.events-list a {
+    display: block;
+}
+
+.events-list li {
+    width: 100%;
+    background-color: #009900;
+    list-style-type: none;
+    font-size: 24px;
+    margin: 10px 0 10px;
+    text-align: center;
+    padding: 10px 0 10px;
+    position: relative;
+}
+
+.events-list li .positive {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #990000;
+}
+
+.events-list li .label {
+    position: relative;
+    z-index: 1;
+}

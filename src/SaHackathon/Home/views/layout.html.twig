@@ -11,8 +11,10 @@
 <body>
 <div class="container">
     <div class="page-header">
-        <h1>{{ title }}
-            <small>Newser</small>
+        <h1>
+            <a href="/">
+                <small>Newser</small>
+            </a>
         </h1>
     </div>
     {% block body %}{% endblock %}
@@ -21,5 +23,9 @@
 <script src="/lib/jquery/dist/jquery.min.js"></script>
 <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/lib/highcharts/highcharts.src.js"></script>
+<script src="/js/highcharts-style.js"></script>
+
+{% block javascripts %}{% endblock %}
+
 </body>
 </html>

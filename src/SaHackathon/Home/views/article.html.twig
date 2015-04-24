@@ -1,0 +1,64 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <h2>Article {{ article.title }}</h2>
+    <div class="row">
+        <div class="col-md-6" id="article-dislike-chart"></div>
+        <div class="col-md-6" id="article-like-chart"></div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% set chartsConfig = [{'container': 'article-dislike-chart', 'valueKey': 'eventsDislike'}, {'container': 'article-like-chart', 'valueKey': 'eventsLike'}] %}
+
+    <script type="text/javascript">
+        $('document').ready(function () {
+            {% for chartConfig in chartsConfig %}
+                new Highcharts.Chart({
+                    chart: {
+                        renderTo: '{{ chartConfig.container }}',
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        title: '',
+                        type: 'datetime',
+                        tickPixelInterval: 150
+                    },
+                    yAxis: {
+                        title: 'Display duration',
+                        type: 'logarithmic',
+                        minorTickInterval: 0.1
+                    },
+                    plotOptions: {
+                        area: {
+                            pointStart: 1940,
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    series: [{
+                        data: JSON.parse('{{ article[chartConfig.valueKey]|json_encode|raw }}')
+                    }]
+                });
+            {% endfor %}
+        });
+    </script>
+{% endblock %}

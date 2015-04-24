@@ -1,5 +1,15 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    Jebac biede!
+    <h2>Last events</h2>
+    <ul class="events-list">
+        {% for event in events %}
+            <li>
+                <a href="/article/{{ event.slug }}">
+                    <span class="positive" style="width: {{ event.dislikeCount / (event.likeCount + event.dislikeCount) * 100 }}%"></span>
+                    <span class="label">{{ event.title }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
