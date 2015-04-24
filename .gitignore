@@ -3,3 +3,5 @@
 /vendor/
 /web/lib
 /node_modules
+!/events/.gitkeep
+/events
