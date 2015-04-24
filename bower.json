@@ -1,0 +1,14 @@
+{
+  "name": "sa-hackathon-backend",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stp-sa-hackathon/sa-hackathon-backend",
+  "authors": [
+    "SA Team <sa@schibsted.pl>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "v3.3.4",
+    "highcharts": "~4.1.5"
+  }
+}
