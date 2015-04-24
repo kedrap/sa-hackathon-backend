@@ -1,3 +1,5 @@
 .idea
 
 /vendor/
+/web/lib
+/node_modules
