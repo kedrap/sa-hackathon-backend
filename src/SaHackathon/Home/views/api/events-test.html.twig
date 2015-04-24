@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <form action="/api/events" method="post">
+        <div class="row">
+            <div class="col">
+                <label>Title</label>
+                <input name="title" value="testEvent" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>Decision</label>
+                <input name="decision" value="OK" /> OK, Cancel, Skip
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>Time</label>
+                <input name="time" value="15" /> (seconds)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>User</label>
+                <input name="user" value="12345" /> (seconds)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input type="submit" />
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -3,12 +3,6 @@ body {
     color: #fff;
 }
 
-div.boardItem {
-}
-
-.boardContent {
-    background: #4C5457;
-    text-align: center;
-    height: 350px;
-    margin: 15px 0;
+input {
+    color: #000;
 }
