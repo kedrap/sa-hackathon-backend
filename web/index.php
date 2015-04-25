@@ -6,14 +6,18 @@ use SaHackathon\Home\HomeControllerProvider;
 use SaHackathon\Home\Api\EventsControllerProvider;
 use SaHackathon\Home\Api\Service\Event\EventDbSaverService;
 use Symfony\Component\Yaml\Yaml;
+use SaHackathon\Home\Data\DataControllerProvider;
 use GuzzleHttp\Client;
 use SaHackathon\Home\Api\Service\SndService;
 use SaHackathon\Home\Api\SndControllerProvider;
 
 $app = new Silex\Application();
 
+$app['debug'] = true;
+
 $app->mount('', new HomeControllerProvider());
 $app->mount('api', new EventsControllerProvider());
+$app->mount('data', new DataControllerProvider());
 $app->mount('api/snd', new SndControllerProvider());
 
 $config = Yaml::parse(file_get_contents('../config/parameters.yml'));

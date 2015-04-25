@@ -3,61 +3,206 @@
 {% block body %}
     <h2>Article {{ article.title }}</h2>
     <div class="row">
-        <div class="col-md-6" id="article-dislike-chart"></div>
-        <div class="col-md-6" id="article-like-chart"></div>
+        <div id="pie-chart"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div id="article-dislike-chart"></div>
+            <p id="dislike">86%</p> disliked
+        </div>
+        <div class="col-md-4">
+            <div id="article-skip-chart"></div>
+            <p id="skip">86%</p> skipped
+        </div>
+        <div class="col-md-4">
+            <div id="article-like-chart"></div>
+            <p id="dislike">86%</p> liked
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {% set chartsConfig = [{'container': 'article-dislike-chart', 'valueKey': 'eventsDislike'}, {'container': 'article-like-chart', 'valueKey': 'eventsLike'}] %}
+    {% set chartsConfig = [
+    {
+    'container': 'article-dislike-chart',
+    'valueKey': 'eventsDislike',
+    'title' : 'Not interested events'
+    },
+    {
+    'container': 'article-like-chart',
+    'valueKey': 'eventsLike',
+    'title' : 'Interested events'
+    },
+    {
+    'container': 'article-skip-chart',
+    'valueKey': 'eventsSkip',
+    'title' : 'Skip events'
+    }
+    ] %}
 
     <script type="text/javascript">
+        function calculatePieChart(charts) {
+            var res, quant = 0, item, result = [];
+
+            result['skip'] = {
+                name: 'Skip',
+                y: 0,
+                color: '#585858'
+            };
+
+            result['dislike'] = {
+                name: 'Dislike',
+                y: 0,
+                color: '#CC3333'
+            };
+
+            result['like'] = {
+                name: 'Like',
+                y: 0,
+                color: '#009933'
+            };
+
+
+            for (item in charts) {
+                charts[item].series[0].data.forEach(function (dataItem) {
+                    quant += 1;
+                    result[item].y += 1;
+                });
+            }
+
+            for (res in result) {
+                result[res].y = (result[res].y * 100 ) / quant ;
+            }
+
+            return [
+                result['like'],
+                result['dislike'],
+                result['skip']
+            ];
+        }
+
+        function requestData() {
+            $.ajax({
+                url: '/data/refresh',
+                success: function (point) {
+                    var charts = [], pie = $("#pie-chart").highcharts();
+                    charts['dislike'] = $("#article-dislike-chart").highcharts();
+                    charts['skip'] = $("#article-skip-chart").highcharts();
+                    charts['like'] = $("#article-like-chart").highcharts();
+
+                    var chart = charts[point.decision],
+                            series = chart.series[0],
+                            shift = series.data.length > 20; // shift if the series is
+                                                             // longer than 20
+                    chart.series[0].addPoint(point, true, shift);
+
+                    var pieData = calculatePieChart(charts);
+
+                    pie.series[0].setData(pieData, true);
+
+                    setTimeout(requestData, 500);
+                },
+                cache: false
+            });
+        }
+
         $('document').ready(function () {
+            $('#pie-chart').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: 'Event division by %'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Events',
+                    data: [
+                        {
+                            name: 'Like',
+                            y: 0,
+                            color: '#009933'
+                        },
+                        {
+                            name: 'Dislike',
+                            y: 0,
+                            color: '#CC3333'
+                        },
+                        {
+                            name: 'Skip',
+                            y: 0,
+                            color: '#585858'
+                        }
+                    ]
+                }]
+            });
+
             {% for chartConfig in chartsConfig %}
-                new Highcharts.Chart({
-                    chart: {
-                        renderTo: '{{ chartConfig.container }}',
-                        type: 'column'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    xAxis: {
-                        title: '',
-                        type: 'datetime',
-                        tickPixelInterval: 150
-                    },
-                    yAxis: {
-                        title: 'Display duration',
-                        type: 'logarithmic',
-                        minorTickInterval: 0.1
-                    },
-                    plotOptions: {
-                        area: {
-                            pointStart: 1940,
-                            marker: {
-                                enabled: false,
-                                symbol: 'circle',
-                                radius: 2,
-                                states: {
-                                    hover: {
-                                        enabled: true
-                                    }
+            new Highcharts.Chart({
+                chart: {
+                    renderTo: '{{ chartConfig.container }}',
+                    type: 'column',
+                    events: {
+                        load: requestData
+                    }
+                },
+                title: {
+                    text: '{{ chartConfig.title }}'
+                },
+                xAxis: {
+                    title: '',
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    title: 'Display duration',
+                    type: 'logarithmic',
+                    minorTickInterval: 0.1
+                },
+                plotOptions: {
+                    area: {
+                        pointStart: 1940,
+                        marker: {
+                            enabled: false,
+                            symbol: 'circle',
+                            radius: 2,
+                            states: {
+                                hover: {
+                                    enabled: true
                                 }
                             }
                         }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    exporting: {
-                        enabled: false
-                    },
-                    series: [{
-                        data: JSON.parse('{{ article[chartConfig.valueKey]|json_encode|raw }}')
-                    }]
-                });
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                series: [{
+                    data: JSON.parse('{{ article[chartConfig.valueKey]|json_encode|raw }}')
+                }]
+            });
             {% endfor %}
         });
     </script>
