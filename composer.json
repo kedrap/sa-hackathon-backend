@@ -14,5 +14,10 @@
       "psr-0": {
         "SaHackathon\\Home\\": "src"
       }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "mkdir events && chmod a+w events"
+        ]
     }
 }
