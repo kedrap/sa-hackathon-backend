@@ -40,6 +40,16 @@ class Article {
     private $date;
 
     /**
+     * @var int
+     */
+    private $likes;
+
+    /**
+     * @var int
+     */
+    private $dislikes;
+
+    /**
      * Sets default date for article
      */
     public function __construct()
@@ -177,6 +187,44 @@ class Article {
     public function setDate($date)
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLikes()
+    {
+        return $this->likes;
+    }
+
+    /**
+     * @param mixed $likes
+     * @return $this
+     */
+    public function setLikes($likes)
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDislikes()
+    {
+        return $this->dislikes;
+    }
+
+    /**
+     * @param mixed $dislikes
+     * @return $this
+     */
+    public function setDislikes($dislikes)
+    {
+        $this->dislikes = $dislikes;
 
         return $this;
     }

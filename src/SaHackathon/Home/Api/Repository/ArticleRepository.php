@@ -66,4 +66,55 @@ class ArticleRepository
 
     }
 
+    /**
+     * Returns unique articles from datasource
+     * @return Article[]
+     */
+    public function getUniqueArticles()
+    {
+
+        $articleList = [];
+
+        $query = $this
+            ->getConnection()
+            ->createQueryBuilder()
+            ->select(
+                '
+                *,
+                (   SELECT count(*)
+                    FROM article as article_double
+                    WHERE article.hash=article_double.hash
+                    AND article_double.decision=\'like\') as articleLikes,
+                (   SELECT count(*)
+                    FROM article as article_double
+                    WHERE article.hash=article_double.hash
+                    AND article_double.decision=\'dislike\') as articleDislikes
+                '
+            )
+            ->from(self::ARTICLE_TABLE_NAME)
+            ->groupBy('hash')
+            ->execute();
+
+
+        $articles = $query->fetchAll();
+
+        foreach ($articles as $id=>$article) {
+            $articleList[$id] = new Article();
+            $articleList[$id]
+                ->setId($article['id'])
+                ->setTitle($article['title'])
+                ->setTime($article['time'])
+                ->setHash($article['hash'])
+                ->setUser($article['user'])
+                ->setDecision($article['decision'])
+                ->setDate($article['date'])
+                ->setLikes($article['articleLikes'])
+                ->setDislikes($article['articleDislikes']);
+
+        }
+
+        return $articleList;
+
+    }
+
 }

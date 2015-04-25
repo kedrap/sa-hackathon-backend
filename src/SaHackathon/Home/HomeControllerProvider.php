@@ -2,6 +2,7 @@
 
 namespace SaHackathon\Home;
 
+use SaHackathon\Home\Api\Repository\ArticleRepository;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
@@ -36,35 +37,14 @@ class HomeControllerProvider implements ControllerProviderInterface
         $controllers->get(
             '/',
             function(Application $app) use($that) {
+
+                $service = $app['eventSaver'];
+                $articleList = $service->getUniqueArticles();
+
                 return $that->twig->render(
                     'index.html.twig',
                     [
-                        'events' => [
-                            [
-                                'title' => 'News 1',
-                                'slug' => 'news-1',
-                                'likeCount' => 74,
-                                'dislikeCount' => 26,
-                            ],
-                            [
-                                'title' => 'News 2',
-                                'slug' => 'news-2',
-                                'likeCount' => 35,
-                                'dislikeCount' => 6,
-                            ],
-                            [
-                                'title' => 'News 3',
-                                'slug' => 'news-3',
-                                'likeCount' => 50,
-                                'dislikeCount' => 50,
-                            ],
-                            [
-                                'title' => 'News 4',
-                                'slug' => 'news-4',
-                                'likeCount' => 10,
-                                'dislikeCount' => 4,
-                            ]
-                        ]
+                        'articles' => $articleList
                     ]
                 );
             }

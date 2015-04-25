@@ -46,4 +46,14 @@ class EventDbSaverService extends EventSaverService
 
     }
 
+    /**
+     * @return \SaHackathon\Home\Api\Entity\Article[]
+     */
+    public function getUniqueArticles ()
+    {
+
+        return $this->articleRepository->getUniqueArticles();
+
+    }
+
 }
