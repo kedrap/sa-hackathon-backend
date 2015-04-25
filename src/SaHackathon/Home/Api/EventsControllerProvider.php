@@ -45,7 +45,7 @@ class EventsControllerProvider implements ControllerProviderInterface
             function(Application $app) use($that) {
                 /** @var Request $request */
                 $request = $app['request'];
-
+                
                 $data = [
                     'title' => $request->get('title'),
                     'decision' => $request->get('decision'),
