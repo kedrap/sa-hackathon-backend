@@ -2,6 +2,7 @@
 
 namespace SaHackathon\Home\Api;
 
+use SaHackathon\Home\Api\Exception\SndException;
 use SaHackathon\Home\Api\Service\SndService;
 use Silex\Application;
 use Silex\ControllerCollection;
@@ -47,19 +48,20 @@ class SndControllerProvider implements ControllerProviderInterface
                 $response = [];
                 $offset = 0;
                 while (count($response) <= $limit) {
-                    $articles = $sndService->getArticles('sport', $excludeHashes, $offset, $limit);
-                    if (!count($articles)) {
+                    try {
+                        $articles = $sndService->getArticles('sport', $excludeHashes, $offset, $limit);
+
+                        $response = array_merge($response, $articles);
+                        $response = array_splice($response, 0, $limit);
+
+                        if (count($response) >= $limit) {
+                            break;
+                        }
+
+                        $offset += $limit;
+                    } catch (SndException $e) {
                         break;
                     }
-
-                    $response = array_merge($response, $articles);
-                    $response = array_splice($response, 0, $limit);
-
-                    if (count($response) >= $limit) {
-                        break;
-                    }
-
-                    $offset += $limit;
                 }
 
                 return json_encode($response);

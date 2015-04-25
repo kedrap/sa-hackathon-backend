@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
+use SaHackathon\Home\Api\Exception\SndException;
 
 class SndService
 {
@@ -50,22 +51,23 @@ class SndService
      * @param int $limit
      *
      * @return array
+     * @throws SndException
      */
     public function getArticles($sectionName, $excludeHashes = [], $offset = 0, $limit = 20)
     {
         $articleUrls = $this->getSectionArticleUrls($sectionName, $offset, $limit);
 
         if (false === $articleUrls) {
-            return [];
+            throw new SndException('Empty article urls list');
         }
 
         $articlesRawData = $this->apiGet($articleUrls);
         if (false === $articlesRawData) {
-            return [];
+            throw new SndException('Can not get articles raw data');
         }
 
         if (!isset($articlesRawData['entries'])) {
-            return [];
+            throw new SndException('Empty entries list');
         }
 
         $result = [];
@@ -145,7 +147,7 @@ class SndService
                 if ($link['rel'] == 'TEASERREL') {
                     return str_replace(
                         ['{snd:mode}', '{snd:cropversion}'],
-                        ['ALTERNATES', 'w480c34'],
+                        ['ALTERNATES', 'w480c43'],
                         $link['href']
                     );
                 }
@@ -197,7 +199,7 @@ class SndService
             'link' => $this->getExtensionChildren($apiItem, 'snd:origUrl'),
             'image' => $this->getImage($apiItem),
             'sndId' => $apiItem['id'],
-            'content' => $bodyText,
+            'detail' => $bodyText,
             'author' => $byline,
         ];
 
