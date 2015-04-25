@@ -67,6 +67,7 @@ class ArticleRepository
     }
 
     /**
+     * Returns unique articles from datasource
      * @return Article[]
      */
     public function getUniqueArticles()

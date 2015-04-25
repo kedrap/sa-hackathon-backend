@@ -39,8 +39,14 @@ class Article {
      */
     private $date;
 
+    /**
+     * @var int
+     */
     private $likes;
 
+    /**
+     * @var int
+     */
     private $dislikes;
 
     /**
