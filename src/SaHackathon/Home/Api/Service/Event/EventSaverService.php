@@ -16,10 +16,11 @@ abstract class EventSaverService implements SaverInterface
     protected function areValid(array $data)
     {
         $requiredKeys = [
-            'title',
-            'decision',
-            'time',
-            'user'
+            'title', // article title
+            'decision', // like, dislike, skip
+            'time', // duration
+            'user', // user id
+            'hash', // article id
         ];
 
         foreach ($requiredKeys as $key) {
