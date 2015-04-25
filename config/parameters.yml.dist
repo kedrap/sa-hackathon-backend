@@ -1,0 +1,7 @@
+parameters:
+    database:
+      host: xxx
+      driver: pdo_mysql
+      user: user_login
+      password: password
+      dbname: database_name

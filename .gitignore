@@ -1,5 +1,5 @@
 .idea
-
+/config/parameters.yml
 /vendor/
 /web/lib
 /node_modules

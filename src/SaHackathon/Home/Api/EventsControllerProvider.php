@@ -2,6 +2,7 @@
 
 namespace SaHackathon\Home\Api;
 
+use SaHackathon\Home\Api\Exception\DatabaseException;
 use SaHackathon\Home\Api\Exception\ValidationException;
 use SaHackathon\Home\Api\Service\SaverInterface;
 use SaHackathon\Home\TwigTrait;
@@ -9,6 +10,7 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventsControllerProvider implements ControllerProviderInterface
 {
@@ -59,6 +61,8 @@ class EventsControllerProvider implements ControllerProviderInterface
                     $status = 201;
                 } catch (ValidationException $e) {
                     $status = 400;
+                } catch (DatabaseException $e) {
+                    $status = 507;
                 }
 
                 return json_encode(
