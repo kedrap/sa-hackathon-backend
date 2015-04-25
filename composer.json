@@ -1,11 +1,15 @@
 {
-    "name": "stp-sa-hackathon/sa-hackathon-backend",
-    "require": {
+  "name": "stp-sa-hackathon/sa-hackathon-backend",
+  "description": "SA Hackathon Backend Application",
+  "license": "MIT",
+  "require": {
         "silex/silex": "~1.2",
         "twig/twig": "~1.18",
         "doctrine/dbal": "v2.5.1",
-        "symfony/yaml": "v2.6.6"
-    },
+        "symfony/yaml": "v2.6.6",
+        "guzzlehttp/guzzle": "~5.2",
+        "symfony/dom-crawler": "~2.6"
+  },
     "authors": [
         {
             "name": "SA STP Team",
@@ -21,5 +25,8 @@
         "post-install-cmd": [
             "cp config/parameters.yml.dist config/parameters.yml"
         ]
+    },
+    "repositories": {
+      "packagist": { "url": "https://packagist.org", "type": "composer" }
     }
 }

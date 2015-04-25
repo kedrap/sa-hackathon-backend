@@ -51,6 +51,7 @@ class EventsControllerProvider implements ControllerProviderInterface
                     'decision' => $request->get('decision'),
                     'time' => $request->get('time'),
                     'user' => $request->get('user'),
+                    'hash' => $request->get('hash')
                 ];
 
                 try {
