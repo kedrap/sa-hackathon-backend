@@ -56,4 +56,28 @@ class EventDbSaverService extends EventSaverService
 
     }
 
+    /**
+     * Returns article
+     * @param $hash
+     * @return mixed
+     */
+    public function getArticleByHash($hash)
+    {
+
+        return $this->articleRepository->getArticleByHash($hash);
+
+    }
+
+    /**
+     * Returns article statistics
+     * @param $hash
+     * @return mixed
+     */
+    public function getArticleStatistics($hash)
+    {
+
+        return $this->articleRepository->getArticleStatistics($hash);
+
+    }
+
 }

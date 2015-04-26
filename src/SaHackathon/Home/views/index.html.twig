@@ -6,8 +6,11 @@
         {% for article in articles %}
             <li>
                 <a href="/article/{{ article.hash }}">
-                    {% set articleFeedback = article.likes + article.dislikes %}
-                    <span class="positive" style="width: {{ articleFeedback == 0 ? 100 : article.dislikes / (article.likes + article.dislikes) * 100 }}%"></span>
+                    {% set articleFeedback = article.likes + article.dislikes + article.skips %}
+                    {% set articleLikes = articleFeedback == 0 ? 100 : article.dislikes / articleFeedback * 100 %}
+                    {% set articleSkips = articleFeedback == 0 ? 0 : article.skips / articleFeedback * 100 %}
+                    <span class="positive" style="width: {{ articleLikes }}%"></span>
+                    <span class="skip" style="width: {{ articleSkips }}%; left: {{ articleLikes }}%"></span>
                     <span class="label">{{ article.title }}</span>
                 </a>
             </li>

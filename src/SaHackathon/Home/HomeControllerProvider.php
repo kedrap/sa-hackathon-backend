@@ -51,17 +51,16 @@ class HomeControllerProvider implements ControllerProviderInterface
         );
 
         $controllers->get(
-            '/article/{slug}',
-            function($slug) use($that) {
+            '/article/{hash}',
+            function($hash) use($app) {
+
+                $service = $app['eventSaver'];
+                $article = $service->getArticleByHash($hash);
+
                 return $this->twig->render(
                     'article.html.twig',
                     [
-                        'article' => [
-                            'slug' => $slug,
-                            'title' => 'Rosenborg-ledelsen visste ikke at Nicki Bille var dømt tidligere',
-                            'eventsLike' => [],
-                            'eventsDislike' => [],
-                        ]
+                        'article' => $article
                     ]
                 );
             }

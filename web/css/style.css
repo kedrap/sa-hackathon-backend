@@ -1,6 +1,6 @@
 body {
-    background: #282C2E;
-    color: #fff;
+    background: #fff;
+    color: #000;
 }
 
 input {
@@ -17,7 +17,7 @@ input {
 
 .events-list li {
     width: 100%;
-    background-color: #009900;
+    background-color: #7accc8;
     list-style-type: none;
     font-size: 24px;
     margin: 10px 0 10px;
@@ -31,10 +31,19 @@ input {
     left: 0;
     top: 0;
     height: 100%;
-    background-color: #990000;
+    background-color: #f26d7d;
+}
+
+.events-list li .skip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #898989;
 }
 
 .events-list li .label {
     position: relative;
     z-index: 1;
+    font-weight: initial;
 }

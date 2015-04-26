@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-    <h2>Article {{ article.title }}</h2>
+    <h2>Article - {{ article.title }}</h2>
     <div class="row">
         <div id="pie-chart"></div>
     </div>
@@ -39,50 +39,14 @@
     ] %}
 
     <script type="text/javascript">
-        function calculatePieChart(charts) {
-            var res, quant = 0, item, result = [];
-
-            result['skip'] = {
-                name: 'Skip',
-                y: 0,
-                color: '#585858'
-            };
-
-            result['dislike'] = {
-                name: 'Dislike',
-                y: 0,
-                color: '#CC3333'
-            };
-
-            result['like'] = {
-                name: 'Like',
-                y: 0,
-                color: '#009933'
-            };
-
-
-            for (item in charts) {
-                charts[item].series[0].data.forEach(function (dataItem) {
-                    quant += 1;
-                    result[item].y += 1;
-                });
-            }
-
-            for (res in result) {
-                result[res].y = (result[res].y * 100 ) / quant ;
-            }
-
-            return [
-                result['like'],
-                result['dislike'],
-                result['skip']
-            ];
-        }
-
         function requestData() {
             $.ajax({
                 url: '/data/refresh',
-                success: function (point) {
+                data: {
+                    hash : '{{ article.hash }}'
+                },
+                success: function (data) {
+                    var point = data.event;
                     var charts = [], pie = $("#pie-chart").highcharts();
                     charts['dislike'] = $("#article-dislike-chart").highcharts();
                     charts['skip'] = $("#article-skip-chart").highcharts();
@@ -94,8 +58,24 @@
                                                              // longer than 20
                     chart.series[0].addPoint(point, true, shift);
 
-                    var pieData = calculatePieChart(charts);
+                    var pieData = [];
+                    pieData[0] = {
+                        name: 'Skip',
+                        y: data.article.skipsPercent,
+                        color: '#898989'
+                    };
 
+                    pieData[1] = {
+                        name: 'Dislike',
+                        y: data.article.dislikesPercent,
+                        color: '#f26d7d'
+                    };
+
+                    pieData[2] = {
+                        name: 'Like',
+                        y: data.article.likesPercent,
+                        color: '#7accc8'
+                    };
                     pie.series[0].setData(pieData, true);
 
                     setTimeout(requestData, 500);
@@ -112,7 +92,8 @@
                     plotShadow: false
                 },
                 title: {
-                    text: 'Event division by %'
+                    text: 'Event division by %',
+                    style: {'color': '#000'}
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -137,17 +118,17 @@
                         {
                             name: 'Like',
                             y: 0,
-                            color: '#009933'
+                            color: '#7accc8'
                         },
                         {
                             name: 'Dislike',
                             y: 0,
-                            color: '#CC3333'
+                            color: '#f26d7d'
                         },
                         {
                             name: 'Skip',
                             y: 0,
-                            color: '#585858'
+                            color: '#898989'
                         }
                     ]
                 }]
@@ -163,7 +144,8 @@
                     }
                 },
                 title: {
-                    text: '{{ chartConfig.title }}'
+                    text: '{{ chartConfig.title }}',
+                    style: {'color': '#000'}
                 },
                 xAxis: {
                     title: '',
