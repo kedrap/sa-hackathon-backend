@@ -3,30 +3,34 @@
   "description": "SA Hackathon Backend Application",
   "license": "MIT",
   "require": {
-        "silex/silex": "~1.2",
-        "twig/twig": "~1.18",
-        "doctrine/dbal": "v2.5.1",
-        "symfony/yaml": "v2.6.6",
-        "guzzlehttp/guzzle": "~5.2",
-        "symfony/dom-crawler": "~2.6"
+    "silex/silex": "~1.2",
+    "twig/twig": "~1.18",
+    "doctrine/dbal": "v2.5.1",
+    "symfony/yaml": "v2.6.6",
+    "guzzlehttp/guzzle": "~5.2",
+    "symfony/dom-crawler": "~2.6",
+    "knplabs/console-service-provider": "~1.0"
   },
-    "authors": [
-        {
-            "name": "SA STP Team",
-            "email": "sa@schibsted.pl"
-        }
-    ],
-    "autoload": {
-      "psr-0": {
-        "SaHackathon\\Home\\": "src"
-      }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "cp config/parameters.yml.dist config/parameters.yml"
-        ]
-    },
-    "repositories": {
-      "packagist": { "url": "https://packagist.org", "type": "composer" }
+  "authors": [
+    {
+      "name": "SA STP Team",
+      "email": "sa@schibsted.pl"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "SaHackathon\\Home\\": "src"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "cp config/parameters.yml.dist config/parameters.yml"
+    ]
+  },
+  "repositories": {
+    "packagist": {
+      "url": "https://packagist.org",
+      "type": "composer"
+    }
+  }
 }

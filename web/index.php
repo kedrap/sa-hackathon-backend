@@ -45,4 +45,6 @@ $app['sndClient'] = function ($app) {
     return $service;
 };
 
+$app['articlesBasePath'] = __DIR__ . '/../';
+
 $app->run();
