@@ -2,6 +2,7 @@
 
 namespace SaHackathon\Home\Data;
 
+use SaHackathon\Home\Api\Entity\Article;
 use Silex\ControllerProviderInterface;
 use SaHackathon\Home\TwigTrait;
 use Silex\Application;
@@ -42,34 +43,50 @@ class DataControllerProvider implements ControllerProviderInterface
             '/refresh',
             function (Application $app) use ($that) {
 
-                $date = new \DateTime();
+                $articleHash = $app['request']->get('hash');
 
-                $event = [
-                    'y' => rand(1, 5),
-                    'x' => strtotime($date->format('Y-m-d H:i:s')) * 1000
-                ];
+                $service = $app['eventSaver'];
+                $articleStatistics = $service->getArticleStatistics($articleHash);
+
+                /** @var Article $article */
+                $article = $service->getArticleByHash($articleHash);
+
+                $date = new \DateTime();
 
                 $seed = rand(1, 20);
 
                 if ($seed % 3 === 0) {
                     $event['decision'] = 'like';
-                    $event['color'] = 'green';
-                    $result['eventLike'][] = $event;
+                    $event['color'] = '#7accc8';
+                    $event['y'] = ($articleStatistics) ? (int)$articleStatistics->getTimeLikes() : 0;
+                    $event['x'] = strtotime($date->format('Y-m-d H:i:s')) * 1000;
                 }
 
                 if ($seed % 3 === 1) {
                     $event['decision'] = 'dislike';
-                    $event['color'] = 'red';
-                    $result['eventDislike'][] = $event;
+                    $event['color'] = '#f26d7d';
+                    $event['y'] = ($articleStatistics) ? (int)$articleStatistics->getTimeDislikes() : 0;
+                    $event['x'] = strtotime($date->format('Y-m-d H:i:s')) * 1000;
                 }
 
                 if ($seed % 3 === 2) {
                     $event['decision'] = 'skip';
-                    $event['color'] = 'gray';
-                    $result['eventDislike'][] = $event;
+                    $event['color'] = '#898989';
+                    $event['y'] = ($articleStatistics) ? (int)$articleStatistics->getTimeSkip() : 0;
+                    $event['x'] = strtotime($date->format('Y-m-d H:i:s')) * 1000;
                 }
 
-                return new JsonResponse($event);
+                $eventsCount = $article->getLikes() + $article->getDislikes() + $article->getSkips(); // TODO: add also skip count
+                $response = [
+                    'event' => $event,
+                    'article' => [
+                        'likesPercent' => (int) ($article->getLikes() / $eventsCount * 100),
+                        'dislikesPercent' => (int) ($article->getDislikes() / $eventsCount * 100),
+                        'skipsPercent' => (int) ($article->getSkips() / $eventsCount * 100),
+                    ]
+                ];
+
+                return new JsonResponse($response);
             }
         );
 
