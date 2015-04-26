@@ -36,39 +36,85 @@ class SndControllerProvider implements ControllerProviderInterface
         $controllers->get(
             '/articles',
             function(Application $app) use($that) {
-                /** @var SndService $sndService */
-                $sndService = $app['sndClient'];
-
                 /** @var Request $request */
                 $request = $app['request'];
 
                 $limit = $request->get('limit', 20);
                 $excludeHashes = json_decode($request->get('excludeHashes', '[]'), true);
 
-                $response = [];
-                $offset = 0;
-                while (count($response) <= $limit) {
-                    try {
-                        $articles = $sndService->getArticles('sport', $excludeHashes, $offset, $limit);
-
-                        $response = array_merge($response, $articles);
-                        $response = array_splice($response, 0, $limit);
-
-                        if (count($response) >= $limit) {
-                            break;
-                        }
-
-                        $offset += $limit;
-                    } catch (SndException $e) {
-                        break;
-                    }
-                }
+                $json = file_get_contents($app['articlesBasePath'] . '/articles.json');
+                $response =  $json ?
+                    $this->getArticlesFromString($json, $excludeHashes, $limit) :
+                    $this->getArticlesFromSndApi($app, $excludeHashes, $limit);
 
                 return json_encode($response);
             }
         );
 
         return $controllers;
+    }
+
+    /**
+     * @param string $json
+     * @param array $excludeHashes
+     * @param int $limit
+     *
+     * @return array
+     */
+    protected function getArticlesFromString($json, $excludeHashes, $limit)
+    {
+        $articles = json_decode($json, true);
+        if (!$articles) {
+            return [];
+        }
+
+        $response = [];
+        while (count($response) < $limit) {
+            $article = array_shift($articles);
+            if ($article == null) {
+                break;
+            }
+
+            if (!in_array($article['hash'], $excludeHashes)) {
+                $response [] = $article;
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param Application $app
+     * @param array $excludeHashes
+     * @param int $limit
+     *
+     * @return array
+     */
+    protected function getArticlesFromSndApi($app, $excludeHashes, $limit)
+    {
+        /** @var SndService $sndService */
+        $sndService = $app['sndClient'];
+
+        $response = [];
+        $offset = 0;
+        while (count($response) <= $limit) {
+            try {
+                $articles = $sndService->getArticles('sport', $excludeHashes, $offset, $limit);
+
+                $response = array_merge($response, $articles);
+                $response = array_splice($response, 0, $limit);
+
+                if (count($response) >= $limit) {
+                    break;
+                }
+
+                $offset += $limit;
+            } catch (SndException $e) {
+                break;
+            }
+        }
+
+        return $response;
     }
 }
 
