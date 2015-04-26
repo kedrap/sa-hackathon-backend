@@ -41,6 +41,7 @@ class SndControllerProvider implements ControllerProviderInterface
 
                 $limit = $request->get('limit', 20);
                 $excludeHashes = json_decode($request->get('excludeHashes', '[]'), true);
+                $excludeHashes = array_keys($excludeHashes);
 
                 $json = file_get_contents($app['articlesBasePath'] . '/articles.json');
                 $response =  $json ?
